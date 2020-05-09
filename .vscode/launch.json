@@ -24,7 +24,7 @@
         }
       ],
       "windows": {
-        "miDebuggerPath": "C:/raylib/mingw/bin/gdb.exe",
+        "miDebuggerPath": "C:/mingw/bin/gdb.exe",
       },
       "osx": {
         "MIMode": "lldb"
@@ -48,7 +48,7 @@
       "MIMode": "gdb",
       "windows": {
         "program": "${workspaceFolder}/${fileBasenameNoExtension}.exe",
-        "miDebuggerPath": "C:/raylib/mingw/bin/gdb.exe"
+        "miDebuggerPath": "C:/mingw/bin/gdb.exe"
       },
       "osx": {
         "MIMode": "lldb"

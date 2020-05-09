@@ -7,9 +7,17 @@
             "label": "build debug",
             "type": "process",
             "command": "make",
-            "args": [
-                "game"
-            ],
+            "windows": {
+                "command": "C:/mingw/bin/mingw32-make.exe",
+                "args": [
+                    "RAYLIB_PATH=C:/work/c/raylib",
+                ],
+            },
+            "osx": {
+                "args": [
+                    "RAYLIB_PATH=/Users/murray/work/c/raylib",
+                ],
+            },
             "group": {
                 "kind": "build",
                 "isDefault": true
@@ -22,6 +30,17 @@
             "label": "build release",
             "type": "process",
             "command": "make",
+            "windows": {
+                "command": "C:/mingw/bin/mingw32-make.exe",
+                "args": [
+                    "RAYLIB_PATH=C:/work/c/raylib",
+                ],
+            },
+            "osx": {
+                "args": [
+                    "RAYLIB_PATH=/Users/murray/work/c/raylib",
+                ],
+            },
             "group": "build",
             "problemMatcher": [
                 "$gcc"
