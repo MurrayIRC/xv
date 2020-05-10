@@ -8,7 +8,7 @@
       "name": "Debug",
       "type": "cppdbg",
       "request": "launch",
-      "program": "${workspaceFolder}/build/game",
+      "program": "${workspaceFolder}/build/xv",
       "args": [],
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}",
@@ -24,7 +24,7 @@
         }
       ],
       "windows": {
-        "miDebuggerPath": "C:/mingw/bin/gdb.exe",
+        "miDebuggerPath": "C:/raylib/mingw/bin/gdb.exe",
       },
       "osx": {
         "MIMode": "lldb"
@@ -44,11 +44,11 @@
       "environment": [],
       "externalConsole": false,
       "targetArchitecture": "x64",
-      "program": "${workspaceFolder}/build/game",
+      "program": "${workspaceFolder}/build/xv",
       "MIMode": "gdb",
       "windows": {
         "program": "${workspaceFolder}/${fileBasenameNoExtension}.exe",
-        "miDebuggerPath": "C:/mingw/bin/gdb.exe"
+        "miDebuggerPath": "C:/raylib/mingw/bin/gdb.exe"
       },
       "osx": {
         "MIMode": "lldb"

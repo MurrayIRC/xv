@@ -7,9 +7,9 @@
 @echo off
 
 :: Determines output and launcher
-SET EXECUTABLE=draw_game.exe
+SET EXECUTABLE=game.exe
 :: Source to build from (can use abs or rel path)
-SET SOURCE=..\..\..\main.c
+SET SOURCE=C:\WORK\C\XV\SRC\main.c C:\WORK\C\XV\SRC\core.c
 
 SET RAYLIB=C:\RAYLIB\RAYLIB\SRC
 

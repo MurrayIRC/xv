@@ -8,14 +8,16 @@
             "type": "process",
             "command": "make",
             "windows": {
-                "command": "C:/mingw/bin/mingw32-make.exe",
+                "command": "C:/raylib/mingw/bin/mingw32-make.exe",
                 "args": [
-                    "RAYLIB_PATH=C:/work/c/raylib",
+                    "RAYLIB_PATH=C:/raylib/raylib",
+                    "BUILD_MODE=DEBUG",
                 ],
             },
             "osx": {
                 "args": [
                     "RAYLIB_PATH=/Users/murray/work/c/raylib",
+                    "BUILD_MODE=DEBUG",
                 ],
             },
             "group": {
@@ -31,9 +33,9 @@
             "type": "process",
             "command": "make",
             "windows": {
-                "command": "C:/mingw/bin/mingw32-make.exe",
+                "command": "C:/raylib/mingw/bin/mingw32-make.exe",
                 "args": [
-                    "RAYLIB_PATH=C:/work/c/raylib",
+                    "RAYLIB_PATH=C:/raylib/raylib",
                 ],
             },
             "osx": {

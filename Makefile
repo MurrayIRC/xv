@@ -1,32 +1,34 @@
 .PHONY: all clean
 
-PROJECT_NAME       ?= XV
+PROJECT_NAME       ?= xv
 RAYLIB_VERSION     ?= 3.0.0
 RAYLIB_API_VERSION ?= 300
 RAYLIB_PATH        ?= ..\..
+PLATFORM           ?= PLATFORM_DESKTOP
+
+BUILD_MODE            ?= RELEASE
+RAYLIB_RELEASE_PATH 	?= $(RAYLIB_PATH)/src
 
 # Define compiler path on Windows
-COMPILER_PATH      ?= C:/mingw/bin
+COMPILER_PATH      ?= C:/raylib/mingw/bin 
 
-# No uname.exe on MinGW!, but OS=Windows_NT on Windows!
-# ifeq ($(UNAME),Msys) -> Windows
-ifeq ($(OS),Windows_NT)
-	PLATFORM_OS=WINDOWS
-	export PATH := $(COMPILER_PATH):$(PATH)
-else
-	UNAMEOS=$(shell uname)
-	ifeq ($(UNAMEOS),Linux)
-		PLATFORM_OS=LINUX
-	endif
-	ifeq ($(UNAMEOS),Darwin)
-		PLATFORM_OS=OSX
-	endif
+# Determine PLATFORM_OS in case PLATFORM_DESKTOP selected
+ifeq ($(PLATFORM),PLATFORM_DESKTOP)
+    # No uname.exe on MinGW!, but OS=Windows_NT on Windows!
+    # ifeq ($(UNAME),Msys) -> Windows
+    ifeq ($(OS),Windows_NT)
+        PLATFORM_OS=WINDOWS
+        export PATH := $(COMPILER_PATH):$(PATH)
+    else
+        UNAMEOS=$(shell uname)
+        ifeq ($(UNAMEOS),Darwin)
+            PLATFORM_OS=OSX
+        endif
+    endif
 endif
 
 # Define default C compiler: gcc
-# NOTE: define g++ compiler if using C++
 CC = gcc
-
 ifeq ($(PLATFORM_OS),OSX)
 	# OSX default compiler
 	CC = clang
@@ -34,20 +36,24 @@ endif
 
 # Define default make program: Mingw32-make
 MAKE = make
-
 ifeq ($(PLATFORM_OS),WINDOWS)
 	MAKE = mingw32-make
 endif
 
 # Define compiler flags:
-#  -O0                  defines optimization level (no optimization, better for debugging)
 #  -O1                  defines optimization level
 #  -g                   include debug information on compilation
 #  -Wall                turns on most, but not all, compiler warnings
 #  -std=c99             defines C language mode (standard C from 1999 revision)
+#  -std=gnu99           defines C language mode (GNU C from 1999 revision)
 #  -Wno-missing-braces  ignore invalid warning (GCC bug 53119)
-CFLAGS = -std=c99 -g -O0 -Wall -Wno-missing-braces
-
+#  -D_DEFAULT_SOURCE    use with -std=c99 on Linux and PLATFORM_WEB, required for timespec
+CFLAGS += -Wall -std=c99 -D_DEFAULT_SOURCE -Wno-missing-braces
+ifeq ($(BUILD_MODE),DEBUG)
+    CFLAGS += -g
+else
+	CFLAGS += -O1
+endif
 # Additional flags for compiler (if desired)
 #CFLAGS += -Wextra -Wmissing-prototypes -Wstrict-prototypes
 ifeq ($(PLATFORM_OS),WINDOWS)
@@ -56,23 +62,20 @@ ifeq ($(PLATFORM_OS),WINDOWS)
 	CFLAGS += -Wl,--subsystem,windows
 endif
 
+LIBRARIES = -Llib -lraylib
 ifeq ($(PLATFORM_OS),WINDOWS)
 	# Libraries for Windows desktop compilation
-	# NOTE: WinMM library required to set high-res timer resolution
-	LIBRARIES = -L $(RAYLIB_PATH)/src -L lib -lraylib -lopengl32 -lgdi32 -lwinmm -lcomdlg32 -lole32
-	# Required for physac examples
-	#LDLIBS += -static -lpthread
+	LIBRARIES += -lopengl32 -lgdi32 -lwinmm -static -lpthread
 endif
 ifeq ($(PLATFORM_OS),OSX)
 	# Libraries for OSX 10.9 desktop compiling
 	# NOTE: Required packages: libopenal-dev libegl1-mesa-dev
-	LIBRARIES = -L lib -lraylib -framework OpenGL -framework OpenAL -framework Cocoa -framework CoreVideo -framework IOKit -framework GLUT
+	LIBRARIES += -framework OpenGL -framework OpenAL -framework Cocoa -framework CoreVideo -framework CoreAudio -framework IOKit
 endif
 
-
-OUTPUT = build/game
+OUTPUT = build/$(PROJECT_NAME)
 SOURCES = src/main.c src/core.c
-INCLUDES = -I $(RAYLIB_PATH)/src -I inc 
+INCLUDES = -Iinc
 DEFINES = -DPLATFORM_DESKTOP
 
 ifeq ($(PLATFORM_OS),OSX)
@@ -81,10 +84,7 @@ endif
 
 # Project target defined by PROJECT_NAME
 all:
-	$(MAKE) $(PROJECT_NAME)
-
-$(PROJECT_NAME):
-	$(CC) $(CFLAGS) -o $(OUTPUT) $(SOURCES) $(FRAMEWORKS) $(INCLUDES) $(LIBRARIES) $(DEFINES)
+	$(CC) -o $(OUTPUT) $(SOURCES) $(CFLAGS) $(INCLUDES) $(LIBRARIES) $(DEFINES)
 
 # Clean everything
 clean:
