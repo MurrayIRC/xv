@@ -43,6 +43,7 @@ void core_init(void)
     player = create_entity();
     player->position = (Vector2){0.0f, 0.0f};
     player->scale = (Vector2){5.0f, 5.0f};
+    player->rotation = 0;
 
     game.camera = (Camera2D){0};
     game.camera.target = player->position;
@@ -78,6 +79,11 @@ void core_update(void)
         player->position.y += 2;
     }
 
+    Vector2 mouse_position = GetMousePosition();
+    if (IsMouseButtonPressed(0)) {
+        player->position = mouse_position;
+    }
+
     // Camera target follows player
     // game.camera.target = (Vector2){player->position.x, player->position.y};
 
@@ -108,7 +114,7 @@ void core_draw(void)
                        player->anim_sprite->dest_rect, player->position, player->rotation, WHITE);
 
         // Debug rect
-        DrawRectangleLines(player->anim_sprite->dest_rect.x, player->anim_sprite->dest_rect.y,
+        DrawRectangleLines(player->position.x, player->position.y,
                            player->anim_sprite->dest_rect.width,
                            player->anim_sprite->dest_rect.height, LIME);
     }
