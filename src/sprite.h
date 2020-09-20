@@ -16,8 +16,8 @@ typedef struct sprite_t {
 typedef struct animated_sprite_t {
     int tileset_id;
     Vector2 tileset_position;
-    Rectangle frame_rect;
-    Rectangle dest_rect;
+    Rectangle rect_src;
+    Rectangle rect_dst;
     Color tint;
 
     int frame_counter;
@@ -26,14 +26,17 @@ typedef struct animated_sprite_t {
     int anim_length;
 } animated_sprite_t;
 
-animated_sprite_t* create_animated_sprite(Rectangle tileset_position_rect, Vector2 scale,
+animated_sprite_t* create_animated_sprite(Rectangle tileset_position_rect, Vector2 offset, Vector2 scale,
                                           int length, int speed)
 {
     animated_sprite_t* out = (animated_sprite_t*)malloc(sizeof(animated_sprite_t));
 
-    out->frame_rect = tileset_position_rect;
-    out->dest_rect =
-        (Rectangle){0.0f, 0.0f, out->frame_rect.width * scale.x, out->frame_rect.height * scale.y};
+    float offset_x = offset.x * out->rect_src.width * scale.x;
+    float offset_y = offset.y * out->rect_src.height * scale.y;
+
+    out->rect_src = tileset_position_rect;
+    out->rect_dst =
+        (Rectangle){offset_x, offset_y, out->rect_src.width * scale.x, out->rect_src.height * scale.y};
 
     out->tileset_position = (Vector2){tileset_position_rect.x, tileset_position_rect.y};
 
@@ -56,8 +59,8 @@ void sprite_animate(animated_sprite_t* sprite)
             sprite->current_frame = 0;
         }
 
-        sprite->frame_rect.x =
-            sprite->tileset_position.x + (float)(sprite->current_frame * sprite->frame_rect.width);
+        sprite->rect_src.x =
+            sprite->tileset_position.x + (float)(sprite->current_frame * sprite->rect_src.width);
     }
 }
 

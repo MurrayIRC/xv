@@ -1,11 +1,11 @@
+#include <raylib.h>
+
 #include "core.h"
 #include "entity.h"
 #include "sprite.h"
 
 #include <stdio.h>
 #include <stdlib.h>
-
-#include <raylib.h>
 
 struct game {
     float screen_width;
@@ -42,8 +42,12 @@ void core_init(void)
     // Setup the player
     player = create_entity();
     player->position = (Vector2){0.0f, 0.0f};
-    player->scale = (Vector2){5.0f, 5.0f};
+    player->scale = (Vector2){3.0f, 3.0f};
     player->rotation = 0;
+    player->height = 0;
+    player->sprite = 0;
+    player->anim_sprite = 0;
+    player->sprite_offset = (Vector2){0.5f, 0.5f};
 
     game.camera = (Camera2D){0};
     game.camera.target = player->position;
@@ -61,8 +65,8 @@ void core_load_resources(void)
     game.all_tilesets[0] = LoadTexture("res/tileset.png");
     game.num_tiles++;
 
-    Rectangle rect = {128.0f, 0.0f, 16, 32};
-    player->anim_sprite = create_animated_sprite(rect, player->scale, 3, 8);
+    Rectangle rect = {128.0f, 16.0f, 16, 16};
+    player->anim_sprite = create_animated_sprite(rect, player->sprite_offset, player->scale, 3, 8);
     player->anim_sprite->tileset_id = 0;
 }
 
@@ -83,6 +87,8 @@ void core_update(void)
     if (IsMouseButtonPressed(0)) {
         player->position = mouse_position;
     }
+
+    entity_update(player);
 
     // Camera target follows player
     // game.camera.target = (Vector2){player->position.x, player->position.y};
@@ -110,13 +116,13 @@ void core_draw(void)
     BeginMode2D(game.camera);
 
     for (int i = 0; i < game.num_tiles; i++) {
-        DrawTexturePro(game.all_tilesets[i], player->anim_sprite->frame_rect,
-                       player->anim_sprite->dest_rect, player->position, player->rotation, WHITE);
+        DrawTexturePro(game.all_tilesets[i], player->anim_sprite->rect_src,
+                       player->anim_sprite->rect_dst, (Vector2){0.0, 0.0}, player->rotation, WHITE);
 
         // Debug rect
         DrawRectangleLines(player->position.x, player->position.y,
-                           player->anim_sprite->dest_rect.width,
-                           player->anim_sprite->dest_rect.height, LIME);
+                           player->anim_sprite->rect_dst.width,
+                           player->anim_sprite->rect_dst.height, LIME);
     }
 
     EndMode2D();
