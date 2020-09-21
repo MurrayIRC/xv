@@ -28,16 +28,16 @@ void entity_calculate_offset(Vector2* offset_out, entity* ent) {
 
 void entity_update(entity* ent) {
     if (ent->sprite != 0) {
-        Vector2* offset;
-        entity_calculate_offset(offset, ent);
-        ent->sprite->rect_dst.x = ent->position.x + offset->x;
-        ent->sprite->rect_dst.y = ent->position.y + offset->y;
+        Vector2 offset = {0, 0};
+        entity_calculate_offset(&offset, ent);
+        ent->sprite->rect_dst.x = ent->position.x + offset.x;
+        ent->sprite->rect_dst.y = ent->position.y + offse.>y;
     } else if (ent->anim_sprite != 0) {
-        Vector2* offset;
-        entity_calculate_offset(offset, ent);
-        ent->anim_sprite->rect_dst.x = ent->position.x + offset->x;
-        ent->anim_sprite->rect_dst.y = ent->position.y + offset->y;
-    y
+        Vector2 offset = {0, 0};
+        entity_calculate_offset(&offset, ent);
+        ent->anim_sprite->rect_dst.x = ent->position.x + offset.x;
+        ent->anim_sprite->rect_dst.y = ent->position.y + offset.y;
+    }
 }
 
 #endif

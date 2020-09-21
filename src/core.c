@@ -12,7 +12,7 @@ struct game {
     float screen_height;
 
     Texture2D* all_tilesets;
-    unsigned int num_tiles;
+    unsigned int num_tilesets;
 
     Camera2D camera;
 } game;
@@ -60,12 +60,12 @@ void core_init(void)
 
 void core_load_resources(void)
 {
-    game.num_tiles = 0;
+    game.num_tilesets = 0;
     game.all_tilesets = (Texture2D*)malloc(sizeof(Texture2D) * MAX_TILESETS);
     game.all_tilesets[0] = LoadTexture("res/tileset.png");
-    game.num_tiles++;
+    game.num_tilesets++;
 
-    Rectangle rect = {128.0f, 16.0f, 16, 16};
+    Rectangle rect = {80.0f, 16.0f, 16, 16};
     player->anim_sprite = create_animated_sprite(rect, player->sprite_offset, player->scale, 3, 8);
     player->anim_sprite->tileset_id = 0;
 }
@@ -115,7 +115,7 @@ void core_draw(void)
 
     BeginMode2D(game.camera);
 
-    for (int i = 0; i < game.num_tiles; i++) {
+    for (int i = 0; i < game.num_tilesets; i++) {
         DrawTexturePro(game.all_tilesets[i], player->anim_sprite->rect_src,
                        player->anim_sprite->rect_dst, (Vector2){0.0, 0.0}, player->rotation, WHITE);
 
@@ -135,7 +135,7 @@ void core_draw(void)
 
 void core_shutdown(void)
 {
-    for (int i = 0; i < game.num_tiles; i++) {
+    for (int i = 0; i < game.num_tilesets; i++) {
         UnloadTexture(game.all_tilesets[i]);
     }
 
