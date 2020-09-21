@@ -42,7 +42,7 @@ void core_init(void)
     // Setup the player
     player = create_entity();
     player->position = (Vector2){0.0f, 0.0f};
-    player->scale = (Vector2){3.0f, 3.0f};
+    player->scale = (Vector2){1.0f, 1.0f};
     player->rotation = 0;
     player->height = 0;
     player->sprite = 0;
@@ -51,7 +51,7 @@ void core_init(void)
 
     game.camera = (Camera2D){0};
     game.camera.target = player->position;
-    // game.camera.offset = (Vector2){game.screen_width / 2, game.screen_height / 2};
+    game.camera.offset = (Vector2){game.screen_width / 2, game.screen_height / 2};
     game.camera.rotation = 0.0f;
     game.camera.zoom = 1.0f;
 
