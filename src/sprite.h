@@ -6,7 +6,6 @@
 #include <stdlib.h>
 
 typedef struct sprite_t {
-    int tileset_id;
     Vector2 tileset_position;
     Rectangle rect_src;
     Rectangle rect_dst;
@@ -14,7 +13,6 @@ typedef struct sprite_t {
 } sprite_t;
 
 typedef struct animated_sprite_t {
-    int tileset_id;
     Vector2 tileset_position;
     Rectangle rect_src;
     Rectangle rect_dst;
@@ -26,8 +24,21 @@ typedef struct animated_sprite_t {
     int anim_length;
 } animated_sprite_t;
 
-animated_sprite_t* create_animated_sprite(Rectangle tileset_position_rect, Vector2 offset, Vector2 scale,
-                                          int length, int speed)
+sprite_t* create_sprite(Rectangle tileset_position_rect, Vector2 offset, Vector2 scale)
+{
+    sprite_t* out = (sprite_t*)malloc(sizeof(sprite_t));
+
+    float offset_x = offset.x * out->rect_src.width * scale.x;
+    float offset_y = offset.y * out->rect_src.height * scale.y;
+
+    out->rect_src = tileset_position_rect;
+    out->rect_dst = (Rectangle){offset_x, offset_y, out->rect_src.width * scale.x, out->rect_src.height * scale.y};
+
+    out->tileset_position = (Vector2){tileset_position_rect.x, tileset_position_rect.y};
+    return out;
+}
+
+animated_sprite_t* create_animated_sprite(Rectangle tileset_position_rect, Vector2 offset, Vector2 scale, int length, int speed)
 {
     animated_sprite_t* out = (animated_sprite_t*)malloc(sizeof(animated_sprite_t));
 
