@@ -10,9 +10,6 @@ typedef struct entity {
     unsigned int id;
 
     Vector2 world_pos;
-    Vector2 move_direction;
-    float move_speed;
-    float rotation;
     int grid_level;
     int grid_x;
     int grid_y;
